@@ -12,7 +12,7 @@
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.161",
+    "@types/lodash": "^4.14.165",
     "@types/node-fetch": "^2.5.7",
     "@typescript-eslint/eslint-plugin": "^4.7.0",
     "@typescript-eslint/parser": "^4.7.0",
