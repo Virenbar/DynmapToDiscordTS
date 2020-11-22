@@ -1,5 +1,5 @@
 import { trySendRequest } from './fetch';
-import config from "./../config.json"
+import { config } from "./config"
 
 export function sendMessage(msgs: MiniEmbed | MiniEmbed[]): Promise<boolean> {
     if (!Array.isArray(msgs)) {
