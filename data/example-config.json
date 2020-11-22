@@ -1,0 +1,6 @@
+{
+    "host": "domain OR ip",
+    "port": 25565,
+    "dynmap": "http://<host>/standalone/dynmap_world.json OR http://<host>/up/world/<world_name>/",
+    "webhook": "https://discordapp.com/api/webhooks/<>/<>"
+}

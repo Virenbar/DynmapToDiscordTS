@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "outDir": "build",
+        "allowJs": true,
+        "lib": [
+            "es2020"
+        ],
+        "module": "commonjs",
+        "target": "ES2019",
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "declaration": true
+    },
+    "include": [
+        "src/**/*"
+    ]
+}

@@ -1,0 +1,75 @@
+{
+  "currentcount": 0,
+  "hasStorm": false,
+  "players": [
+    
+  ],
+  "isThundering": false,
+  "confighash": -1334062447,
+  "servertime": 1000,
+  "updates": [
+    {
+      "type": "tile",
+      "name": "t/-1_0/-10_6.png",
+      "timestamp": 10
+    },
+    {
+      "type": "playerjoin",
+      "playerName": "Virenbar",
+      "account": "Virenbar",
+      "timestamp": 11
+    },
+    {
+      "type": "chat",
+      "source": "player",
+      "playerName": "Virenbar",
+      "message": "test",
+      "account": "Virenbar",
+      "channel": "",
+      "timestamp": 12
+    },
+    { 
+      "type": "chat",
+      "source": "player", 
+      "playerName": "<span style='color:#000AA'>[M]<span style='color:#FFFFFF'><span style='color:#FFFFFF'>bezumeth</span></span></span>", 
+      "message": "Cnacm6o, Cepeep :-)", 
+      "account": "&l[M]&f&fbezumeth", 
+      "channel": "", 
+      "timestamp": 15
+    },
+    {
+      "type": "playerquit",
+      "playerName": "Virenbar",
+      "account": "Virenbar",
+      "timestamp": 13
+    },
+    {
+      "type": "chat",
+      "source": "plugin",
+      "playerName": "",
+      "message": "[Server]Ивент \"Охотники на дракона\"начался!",
+      "account": "",
+      "channel": "",
+      "timestamp": 14
+    },
+    {
+      "type": "chat",
+      "source": "web",
+      "playerName": "Virenbar",
+      "message": "123",
+      "account": null,
+      "channel": null,
+      "timestamp": 1548148004141
+    },
+    {
+      "type": "chat",
+      "source": "plugin",
+      "playerName": "",
+      "message": "Eavee впервые вошел на сервер!",
+      "account": "",
+      "channel": "",
+      "timestamp": 1586205682949
+    }
+  ],
+  "timestamp": 50
+}
