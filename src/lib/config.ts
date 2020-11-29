@@ -3,7 +3,7 @@ import fs from "fs"
 import path from "path"
 import { logger } from "../index"
 
-const file = path.join(__dirname, "../config.json")
+const file = path.join(__dirname, "../../config.json")
 let fsw: fs.FSWatcher
 export let config: Config
 

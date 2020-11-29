@@ -16,17 +16,6 @@ const serverWait = 60 * 1000
 
 function Ping(host: string, port: number): Promise<StatusResponse> {
     return status(host, { "port": port })
-    /*     return new Promise((resolve, reject) => {
-            mc.ping({
-                host: host,
-                port: port
-            }, (err, result) => {
-                if (err) {
-                    reject(err)
-                }
-                resolve(result as unknown as PingResult)
-            })
-        }) */
 }
 function getServerInfo(): Promise<StatusResponse> {
     return Ping(config.host, config.port)
@@ -39,14 +28,10 @@ async function getFullServerInfo(): Promise<PingResult> {
 }*/
 
 async function getPlayerList(): Promise<Set<string>> {
-    //let pp = _.map(serverInfo.players.sample, 'name')
     if (!serverInfo.onlinePlayers) { return new Set<string>() }
     const players = new Set<string>(_.map(serverInfo.samplePlayers, 'name'))
-    /*serverInfo.players.sample.forEach(player => {
-        players.add(player.name)
-    })*/
 
-    while (players.size < serverInfo.onlinePlayers) {
+    while (serverInfo.onlinePlayers > 12 && players.size < serverInfo.onlinePlayers) {
         serverInfo = await getServerInfo()
         serverInfo.samplePlayers.forEach(player => {
             if (!players.has(player.name)) {
@@ -55,8 +40,9 @@ async function getPlayerList(): Promise<Set<string>> {
         })
         await sleep(listWait)
     }
-    _.sortBy(players)
-    return players
+    let arr = Array.from(players)
+    arr = _.sortBy<string>(arr, (x) => x.toLowerCase())
+    return new Set<string>(arr)
 }
 
 async function CheckServer(): Promise<void> {
@@ -97,7 +83,7 @@ async function CheckServer(): Promise<void> {
             logger.info('Connection to server restored')
         }
     } catch (err) {
-        if (/*!noConFlag &&*/ err.code == 'ECONNREFUSED') {
+        if (!(err === undefined) && err.code == 'ECONNREFUSED') {
             logger.warn('No connection to server.')
             logger.warn(err)
             noConFlag = true
@@ -111,7 +97,7 @@ async function ServerLoop() {
         const ps = 4 * 60 * 1000 * (serverInfo.onlinePlayers / serverInfo.maxPlayers)
         await sleep(serverWait + ps)
     } catch (err) {
-        logger.error('Unknown error')
+        logger.error('Server - Unknown error')
         logger.error(err)
         await sleep(serverWait * 2)
     } finally {
@@ -122,6 +108,6 @@ async function ServerLoop() {
 export default async function (): Promise<void> {
     serverInfo = await getServerInfo()
     playersOnline = await getPlayerList()
-    logger.info(`Connected to ${_.map(serverInfo.description.descriptionText, 'text').join('')} on ${config.host}:${config.port}`)
+    logger.info(`Connected to ${serverInfo.description.descriptionText} on ${config.host}:${config.port}`)
     ServerLoop()
 }

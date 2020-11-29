@@ -15,7 +15,7 @@ configure({
         default: { appenders: ["file", "console"], level: "debug" }
     }
 });
-export const logger = getLogger()
+export const logger = getLogger('DtD')
 const name = 'Dynmap to Discord'
 const version = '4.0'
 

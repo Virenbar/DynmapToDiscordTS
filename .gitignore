@@ -104,6 +104,6 @@ dist
 .tern-port
 
 #config
-src/config.json
+config.json
 # builded src
 build/

@@ -2,14 +2,20 @@ import { FetchError } from 'node-fetch'
 import { logger } from '..'
 import { config } from "../lib/config"
 import { get } from './../lib/fetch'
-import { sleep } from './../utils'
+import { fixMD, sleep } from './../utils'
 import { sendMessage, MiniEmbed } from './../lib/discord'
 
 let noConFlag = false
 let dynmapInfo: DynmapFile
 let timestamp = 0 //420000
 const dynmapWait = 10 * 1000
-
+const dims = {
+    "world": "O",//"🟢",
+    "world_nether": "N", //"🔴",
+    "world_end": "E",
+    "world_oldnether": "~~E~~",
+    "test": "🟡"
+}
 async function getDynmapInfo(): Promise<DynmapFile> {
     const data = await get(config.dynmap)
     const json = JSON.parse(data) as DynmapFile
@@ -22,19 +28,20 @@ async function getUUID(name: string): Promise<string> {
         const json = JSON.parse(data)
         return json.id
     } catch (err) {
-        logger.error(`Player not found: ${name}`)
-        logger.error(err)
+        logger.warn(`Player not found: ${name}`)
+        logger.warn(err)
         return '00000000-0000-0000-0000-000000000000'
     }
 }
 
-function getPos(name: string): string {
+function getPos(account: string): string {
     const player = dynmapInfo.players.filter((p) => {
-        return p.account == name
+        return p.account == account
     })
     if (player.length > 0) {
         const P = player[0]
-        return `(${P.x} ${P.y} ${P.z})`
+        const D = dims[P.world] || ""
+        return `${D}(${P.x} ${P.y} ${P.z})`
     } else {
         return ""
     }
@@ -47,32 +54,28 @@ async function CheckDynmap(): Promise<void> {
         for (const event of dynmapInfo.updates) {
             if (event.timestamp > timestamp && event.type != 'tile') {
                 if (event.type == 'chat') {
-                    //console.log(event.timestamp)
                     const time = new Date(event.timestamp).toISOString()
                     switch (event.source) {
                         case 'player': {
-                            const player = event.account.replace(/[&]./g, '')
-                            const uuid = await getUUID(player.replace(/\[.*?\]/g, ''))
+                            const player = event.account.replace(/&./g, '')
+                            const account = player.replace(/\[.*?\]/g, '')
+                            const uuid = await getUUID(account)
                             myEmbeds.push({
-                                //"name" = player,
-                                //"icon" = 'https://crafatar.com/avatars/'..getUUID(player:gsub('%[.-%]',''))..'?overlay',   --Steve 00000000-0000-0000-0000-000000000000 Alex ..0001
-                                "message": event.message,
+                                //--Steve 00000000-0000-0000-0000-000000000000 Alex ..0001
+                                "message": fixMD(event.message),
                                 "color": parseInt((event.playerName.match(/"color:#(.+)"/) || ['', 'ffffff'])[1], 16),
                                 "footer_icon": `https://crafatar.com/avatars/${uuid}?overlay`,
-                                "footer": `${player} ${getPos(event.account)}`,
+                                "footer": `${player} ${getPos(account)}`,
                                 "timestamp": time
                             })
                             break
                         }
                         case 'plugin':
                             if (event.message.startsWith('[Server]')) {
-                                //myEmbeds.push(new Embed())
+
                                 myEmbeds.push({
-                                    //"name" : 'Server',
-                                    //"icon" : serverInfo.favicon,
                                     "message": event.message.substr(8),
                                     "color": 0xFF55FF,
-                                    //"footer_icon": '',
                                     "footer": 'Server',
                                     "timestamp": time
                                 })
@@ -92,11 +95,8 @@ async function CheckDynmap(): Promise<void> {
                                 })
                             } else if (!event.message.match(/вошел|вышел/i)) {
                                 myEmbeds.push({
-                                    //"name" : 'Server',
-                                    //"icon" : serverInfo.favicon,
                                     "message": event.message,
                                     "color": 0xFFFF55,
-                                    //"footer_icon": '',
                                     "footer": 'Unknown',
                                     "timestamp": time
                                 })
@@ -104,7 +104,6 @@ async function CheckDynmap(): Promise<void> {
                             break
                         case 'web':
                             myEmbeds.push({
-                                //"name" : '[Web]'..event.playerName,
                                 "message": event.message,
                                 "color": 0xffffff,
                                 "footer": `[Web]${event.playerName}`,
@@ -130,7 +129,7 @@ async function CheckDynmap(): Promise<void> {
             logger.info('Connection to dynmap restored')
         }
     } catch (err) {
-        if (/*!noConFlag &&*/ err instanceof FetchError && err.code == 'ECONNREFUSED') {
+        if (/*!noConFlag &&*/ err instanceof FetchError && (err.code == 'ECONNREFUSED' || err.code == 'ETIMEDOUT')) {
             logger.warn('No connection to dynmap.')
             logger.warn(err)
             noConFlag = true
@@ -141,10 +140,10 @@ async function CheckDynmap(): Promise<void> {
 
 async function DynmapLoop() {
     try {
-        CheckDynmap()
+        await CheckDynmap()
         await sleep(dynmapWait)
     } catch (err) {
-        logger.error("Unknown error")
+        logger.error("Dynmap - Unknown error")
         logger.error(err)
         await sleep(60 * 1000)
     } finally {

@@ -4,5 +4,5 @@ if ! screen -list | grep -q $name; then
     #cd $DIR
     screen -dmS $name
 fi
-screen -S $name -X stuff 'npm run start
+screen -S $name -X stuff 'npm run startProd
 '
