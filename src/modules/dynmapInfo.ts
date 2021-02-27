@@ -152,6 +152,10 @@ async function DynmapLoop() {
 }
 
 export default async function (): Promise<void> {
+    if (config.dynmap == "") {
+        logger.warn('Dynmap URL not set. Module disabled.')
+        return
+    }
     dynmapInfo = await getDynmapInfo()
     logger.info(`Dynmap file: ${config.dynmap} Timestamp: ${dynmapInfo.timestamp}`)
     DynmapLoop()
