@@ -7,7 +7,7 @@
     "url": "https://github.com/Virenbar/DynmapToDiscordTS"
   },
   "dependencies": {
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "log4js": "^6.3.0",
     "minecraft-server-util": "^3.4.2",
     "node-fetch": "^2.6.1"
