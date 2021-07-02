@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { status } from "minecraft-server-util"
-import { sleep, fixMD } from './../utils'
+import { sleep, fixMD, withTimeout } from './../utils'
 import { sendMessage } from './../lib/discord'
 import { config } from "../lib/config"
 import { logger } from '..'
@@ -92,16 +92,16 @@ async function CheckServer(): Promise<void> {
 }
 
 async function ServerLoop() {
-    try {
-        await CheckServer()
-        const ps = 4 * 60 * 1000 * (serverInfo.onlinePlayers / serverInfo.maxPlayers)
-        await sleep(serverWait + ps)
-    } catch (err) {
-        logger.error('Server - Unknown error')
-        logger.error(err)
-        await sleep(serverWait * 2)
-    } finally {
-        ServerLoop()
+    for (; ;) {
+        try {
+            await withTimeout(CheckServer, 60 * 60 * 1000, "Server timeouted")
+            const ps = 4 * 60 * 1000 * (serverInfo.onlinePlayers / serverInfo.maxPlayers)
+            await sleep(serverWait + ps)
+        } catch (err) {
+            logger.error('Server - Unknown error')
+            logger.error(err)
+            await sleep(serverWait * 2)
+        }
     }
 }
 

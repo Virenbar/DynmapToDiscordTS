@@ -2,7 +2,7 @@ import { FetchError } from 'node-fetch'
 import { logger } from '..'
 import { config } from "../lib/config"
 import { get } from './../lib/fetch'
-import { fixMD, sleep } from './../utils'
+import { fixMD, sleep, withTimeout } from './../utils'
 import { sendMessage, MiniEmbed } from './../lib/discord'
 
 let noConFlag = false
@@ -139,15 +139,15 @@ async function CheckDynmap(): Promise<void> {
 }
 
 async function DynmapLoop() {
-    try {
-        await CheckDynmap()
-        await sleep(dynmapWait)
-    } catch (err) {
-        logger.error("Dynmap - Unknown error")
-        logger.error(err)
-        await sleep(60 * 1000)
-    } finally {
-        DynmapLoop()
+    for (; ;) {
+        try {
+            await withTimeout(CheckDynmap, 60 * 1000, "Dynmap timeouted")
+            await sleep(dynmapWait)
+        } catch (err) {
+            logger.error("Dynmap - Unknown error")
+            logger.error(err)
+            await sleep(60 * 1000)
+        }
     }
 }
 
