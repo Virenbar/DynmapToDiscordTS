@@ -10,20 +10,25 @@
     "lodash": "^4.17.21",
     "log4js": "^6.3.0",
     "minecraft-server-util": "^3.5.2",
-    "node-fetch": "^2.6.1",
-    "typescript": "^4.3.5"
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.168",
     "@types/node-fetch": "^2.5.8",
     "@typescript-eslint/eslint-plugin": "^4.15.0",
     "@typescript-eslint/parser": "^4.15.0",
-    "eslint": "^7.20.0"
+    "eslint": "^7.20.0",
+    "typescript": "^4.3.5"
   },
   "scripts": {
+    "start": "node build/index.js",
+    "start:dev": "tsc && node build/index.js",
+    "pm2": "pm2 start DtDTS.config.js",
+    "pm2:i": "npm i --only=prod",
     "build": "tsc",
-    "start": "npm run build && node build/index.js",
-    "startProd": "export NODE_ENV=production && npm i && npm run start",
     "lint": "eslint ."
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
