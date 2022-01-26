@@ -9,7 +9,7 @@
   "dependencies": {
     "lodash": "^4.17.21",
     "log4js": "^6.4.1",
-    "minecraft-server-util": "^3.5.2",
+    "minecraft-server-util": "^5.2.9",
     "node-fetch": "^3.2.0"
   },
   "devDependencies": {
