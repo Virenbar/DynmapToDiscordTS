@@ -1,34 +1,25 @@
-import { configure, getLogger } from "log4js"
-import { sendMessage } from './lib/discord'
-import loadConfig, { config } from "./lib/config"
-import Server from './modules/serverInfo'
-import Dynmap from './modules/dynmapInfo'
+import "dotenv/config";
+import log4js from "log4js";
+import { DtDWebhook } from "./DtDWebhook.js";
+import Services from "./services/index.js";
 
-loadConfig()
-configure({
+log4js.configure({
     appenders: {
-        file: { type: "file", filename: "logs/debug.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
+        debugFile: { type: "file", filename: "logs/debug.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
+        errorFile: { type: "file", filename: "logs/error.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
         console: { type: "console", layout: { type: "colored" } },
-        "err-filter": { type: 'logLevelFilter', appender: 'console', level: 'error' }
+        info: { type: "logLevelFilter", appender: "console", level: "info" },
+        errors: { type: "logLevelFilter", appender: "errorFile", level: "error" },
     },
     categories: {
-        default: { appenders: ["file", "console"], level: "debug" }
-    }
+        default: { appenders: ["debugFile", "info", "errors"], level: "debug" },
+    },
 });
-export const logger = getLogger('DtD')
-const name = 'Dynmap to Discord'
-const version = '4.1'
 
-async function Init() {
-    logger.info('Starting')
-    await sendMessage({
-        "title": name,
-        "message": `Version: ${version}\nServer: ${config.host}:${config.port}\nDynmap: ${config.dynmap}`,
-        "timestamp": new Date().toISOString()
-    })
-    await Server()
-    await Dynmap()
-    logger.info('Ready')
-}
+const Client = new DtDWebhook(process.env["id"] as string, process.env["token"] as string);
 
-Init()
+Client.logger.info("Initializing");
+Services.Initialize(Client);
+Services.Start();
+Client.SendTitle();
+Client.logger.info(`Running in ${Client.id}`);

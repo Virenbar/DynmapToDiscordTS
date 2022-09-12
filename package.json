@@ -1,34 +1,41 @@
 {
+  "name": "dynmap-to-discord",
+  "version": "5.0.0",
+  "description": "Dynmap to Discord relay",
   "author": "Virenbar",
   "license": "MIT",
-  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/Virenbar/DynmapToDiscordTS"
   },
-  "dependencies": {
-    "lodash": "^4.17.21",
-    "log4js": "^6.4.1",
-    "minecraft-server-util": "^3.5.2",
-    "node-fetch": "^3.2.0"
-  },
-  "devDependencies": {
-    "@types/lodash": "^4.14.168",
-    "@types/node-fetch": "^2.5.8",
-    "@typescript-eslint/eslint-plugin": "^4.15.0",
-    "@typescript-eslint/parser": "^4.15.0",
-    "eslint": "^7.20.0",
-    "typescript": "^4.3.5"
-  },
+  "main": "index.js",
   "scripts": {
     "start": "node build/index.js",
-    "start:dev": "tsc && node build/index.js",
-    "pm2": "pm2 start DtDTS.config.js",
-    "pm2:i": "npm i --only=prod",
-    "build": "tsc",
-    "lint": "eslint ."
+    "start:dev": "tsc -b && node build/index.js",
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "discord.js": "^14.3.0",
+    "dotenv": "^16.0.2",
+    "lodash": "^4.17.21",
+    "log4js": "^6.6.1",
+    "minecraft-server-util": "^5.3.1",
+    "mysql2": "^2.3.3",
+    "node-fetch": "^3.2.10"
+  },
+  "devDependencies": {
+    "@tsconfig/node16-strictest-esm": "^1.0.3",
+    "@types/lodash": "^4.14.185",
+    "@types/node": "^16.0.0",
+    "@types/node-fetch": "^2.6.2",
+    "@typescript-eslint/eslint-plugin": "^5.36.0",
+    "@typescript-eslint/parser": "^5.36.0",
+    "eslint": "^8.23.0",
+    "eslint-plugin-import": "^2.26.0",
+    "typescript": "^4.8.3"
   },
   "engines": {
     "node": "16.x"
-  }
+  },
+  "type": "module"
 }
