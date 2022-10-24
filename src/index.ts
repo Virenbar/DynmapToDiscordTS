@@ -1,7 +1,7 @@
 import "dotenv/config";
 import log4js from "log4js";
 import { DtDWebhook } from "./DtDWebhook.js";
-import Services from "./services/index.js";
+import Tasks from "./tasks.js";
 
 log4js.configure({
     appenders: {
@@ -19,7 +19,8 @@ log4js.configure({
 const Client = new DtDWebhook(process.env["id"] as string, process.env["token"] as string);
 
 Client.logger.info("Initializing");
-Services.Initialize(Client);
-Services.Start();
+Client.initialize();
+Client.reload();
 Client.SendTitle();
-Client.logger.info(`Running in ${Client.id}`);
+Client.logger.info(`Running as ${Client.id}`);
+Tasks.start();

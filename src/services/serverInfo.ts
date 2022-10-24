@@ -4,6 +4,7 @@ import log4js from "log4js";
 import { JavaStatusResponse, status } from "minecraft-server-util";
 import { FetchError } from "node-fetch";
 import type { DtDWebhook } from "../DtDWebhook.js";
+import type { Task } from "../tasks.js";
 import { fixMD, sleep } from "./../helpers/index.js";
 import { AddOnline } from "./database.js";
 import type { Service } from "./index.js";
@@ -16,12 +17,11 @@ let lostConnection = false;
 let serverInfo: JavaStatusResponse;
 let playersOnline: Set<string> = new Set<string>();
 
-function Initialize(client: DtDWebhook) {
+function initialize(client: DtDWebhook) {
     Client = client;
 }
 
-async function Start() {
-    Reload();
+async function start() {
     await refreshInfo();
     playersOnline = await getPlayerList();
     Logger.info("Started");
@@ -39,7 +39,7 @@ async function Start() {
         }
     }
 }
-function Reload() {
+function reload() {
     Server.host = Client.config.host;
     Server.port = Client.config.port ?? undefined;
     Logger.info("Reloaded");
@@ -126,6 +126,6 @@ async function CheckServer(): Promise<void> {
         }
     }
 }
-
-const ServerInfo: Service = { Initialize, Start, Reload };
+const name = "Dynmap Info";
+const ServerInfo: Service & Task = { name, initialize, reload, start };
 export default ServerInfo;

@@ -5,6 +5,7 @@ import { FetchError } from "node-fetch";
 import type { DtDWebhook } from "../DtDWebhook.js";
 import { fixMD, getJSON, sleep } from "../helpers/index.js";
 import type { Profile } from "../models/index.js";
+import type { Task } from "../tasks.js";
 import { AddMessage } from "./database.js";
 import type { Service } from "./index.js";
 
@@ -24,12 +25,12 @@ const dims: { [dim: string]: string } = {
     "test": "🟡"
 };
 
-function Initialize(client: DtDWebhook) {
+function initialize(client: DtDWebhook) {
     Client = client;
 }
 
-async function Start() {
-    Reload();
+async function start() {
+    reload();
     if (FileURL == "") {
         Logger.warn("Dynmap URL not set. Service disabled");
         return;
@@ -48,7 +49,7 @@ async function Start() {
         }
     }
 }
-function Reload() {
+function reload() {
     FileURL = Client.config.dynmap ?? "";
     Logger.info("Reloaded");
 }
@@ -215,6 +216,6 @@ interface ChatEvent extends Event {
     account: string
     channel: string
 }
-
-const DynmapInfo: Service = { Initialize, Start, Reload };
+const name = "Dynmap Info";
+const DynmapInfo: Service & Task = { name, initialize, reload, start };
 export default DynmapInfo;

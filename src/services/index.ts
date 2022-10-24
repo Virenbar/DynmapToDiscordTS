@@ -1,26 +1,34 @@
+import log4js from "log4js";
 import type { DtDWebhook } from "../DtDWebhook.js";
 import DynmapInfo from "./dynmapInfo.js";
 import ServerInfo from "./serverInfo.js";
-
+export const Logger = log4js.getLogger("Service");
 const Services: Service[] = [];
 
-function Initialize(client: DtDWebhook): void {
+function initialize(client: DtDWebhook): void {
+    Logger.debug("Initializing");
     Services.push(...[DynmapInfo, ServerInfo]);
-    Services.forEach(M => M.Initialize(client));
+    Services.forEach(M => {
+        M.initialize(client);
+        Logger.debug(`Initialized: ${M.name}`);
+    });
+    Logger.debug("Initializing done");
 }
 
-function Start() {
-    Services.forEach(M => M.Start());
+function reload() {
+    Logger.debug("Reloading");
+    Services.forEach(M => {
+        if (M.reload) {
+            M.reload();
+            Logger.debug(`Reloaded: ${M.name}`);
+        }
+    });
+    Logger.debug("Reloading done");
 }
 
-function Reload() {
-    Services.forEach(M => M.Reload());
-}
-
-export default { Initialize, Start, Reload };
-
+export default { initialize, reload };
 export interface Service {
-    Initialize(client: DtDWebhook): void;
-    Start(): void;
-    Reload(): void;
+    name: string
+    initialize(client: DtDWebhook): void;
+    reload?(): void;
 }

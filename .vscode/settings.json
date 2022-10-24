@@ -5,6 +5,13 @@
         "typescript"
     ],
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    }
+        "source.fixAll.eslint": true,
+        "source.organizeImports": true
+    },
+    "cSpell.words": [
+        "appender",
+        "appenders",
+        "Dynmap",
+        "minecraft"
+    ]
 }

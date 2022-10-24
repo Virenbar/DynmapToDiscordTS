@@ -1,6 +1,7 @@
 import log4js from "log4js";
 import mysql from "mysql2/promise";
 import type { DtDWebhook } from "../DtDWebhook.js";
+import type { Task } from "../tasks.js";
 import { sleep } from "./../helpers/index.js";
 import type { Service } from "./index.js";
 
@@ -12,12 +13,12 @@ let Connection: mysql.Connection;
 const Online: Online[] = [];
 const Messages: Message[] = [];
 
-function Initialize(client: DtDWebhook) {
+function initialize(client: DtDWebhook) {
     Client = client;
 }
 
-async function Start() {
-    Reload();
+async function start() {
+    reload();
     if (!Client.config.dynmap) {
         Logger.warn("Dynmap URL not set. Service disabled");
         return;
@@ -37,7 +38,7 @@ async function Start() {
         }
     }
 }
-function Reload() {
+function reload() {
     Config = {
         host: process.env["host"] as string,
         user: process.env["user"] as string,
@@ -79,6 +80,6 @@ interface Online {
     online: number,
     date: Date
 }
-
-const Database: Service = { Initialize, Start, Reload };
+const name = "Database";
+const Database: Service & Task = { name, initialize, reload, start };
 export default Database;
