@@ -1,26 +1,33 @@
 import "dotenv/config";
 import log4js from "log4js";
 import { DtDWebhook } from "./DtDWebhook.js";
+import Export from "./export.js";
 import Tasks from "./tasks.js";
 
+const DEBUG = process.env["DEBUG"];
 log4js.configure({
     appenders: {
-        debugFile: { type: "file", filename: "logs/debug.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
-        errorFile: { type: "file", filename: "logs/error.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
+        fileDebug: { type: "file", filename: "logs/debug.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
+        fileError: { type: "file", filename: "logs/error.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
         console: { type: "console", layout: { type: "colored" } },
-        info: { type: "logLevelFilter", appender: "console", level: "info" },
-        errors: { type: "logLevelFilter", appender: "errorFile", level: "error" },
+        infoConsole: { type: "logLevelFilter", appender: "console", level: "info" },
+        errorFile: { type: "logLevelFilter", appender: "fileError", level: "error" }
     },
     categories: {
-        default: { appenders: ["debugFile", "info", "errors"], level: "debug" },
-    },
+        default: { appenders: ["fileDebug", "errorFile", DEBUG ? "console" : "infoConsole"], level: "debug" }
+    }
 });
+const e = process.env["export"] as string;
+await Export.start(e);
 
-const Client = new DtDWebhook(process.env["id"] as string, process.env["token"] as string);
+const id = process.env["id"] as string;
+const token = process.env["token"] as string;
+const Client = new DtDWebhook(id, token);
 
 Client.logger.info("Initializing");
 Client.initialize();
 Client.reload();
-Client.SendTitle();
+Client.sendTitle();
 Client.logger.info(`Running as ${Client.id}`);
 Tasks.start();
+

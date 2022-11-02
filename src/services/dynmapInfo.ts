@@ -3,10 +3,10 @@ import _ from "lodash";
 import log4js from "log4js";
 import { FetchError } from "node-fetch";
 import type { DtDWebhook } from "../DtDWebhook.js";
-import { fixMD, getJSON, sleep } from "../helpers/index.js";
+import { fixMD, getJSON, sleepS } from "../helpers/index.js";
 import type { Profile } from "../models/index.js";
 import type { Task } from "../tasks.js";
-import { AddMessage } from "./database.js";
+import Database from "./database.js";
 import type { Service } from "./index.js";
 
 const Logger = log4js.getLogger("Dynmap Info");
@@ -32,7 +32,7 @@ function initialize(client: DtDWebhook) {
 async function start() {
     reload();
     if (FileURL == "") {
-        Logger.warn("Dynmap URL not set. Service disabled");
+        Logger.warn("Dynmap URL not set. Task disabled");
         return;
     }
     await RefreshInfo();
@@ -42,10 +42,10 @@ async function start() {
     for (; ;) {
         try {
             await CheckDynmap();
-            await sleep(10 * 1000);
+            await sleepS(10);
         } catch (error) {
             Logger.error(error);
-            await sleep(60 * 1000);
+            await sleepS(60);
         }
     }
 }
@@ -79,7 +79,7 @@ async function PlayerEmbed(event: ChatEvent) {
         const D = dims[player?.world] ?? "";
         position = `${D}(${player?.x} ${player?.y} ${player?.z})`;
     }
-    AddMessage({
+    Database.addMessage({
         player: account,
         uuid: uuid,
         text: event.message,

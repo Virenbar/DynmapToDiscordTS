@@ -5,7 +5,7 @@ on:
 jobs:
   build:
     name: Build
-    uses: Virenbar/Discord.js-Sandbox/.github/workflows/build-artifact.yml@master
+    uses: Virenbar/DynmapToDiscordTS/.github/workflows/build-artifact.yml@master
 
   publish:
     name: Publish

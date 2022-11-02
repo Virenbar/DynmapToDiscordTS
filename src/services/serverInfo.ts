@@ -5,8 +5,8 @@ import { JavaStatusResponse, status } from "minecraft-server-util";
 import { FetchError } from "node-fetch";
 import type { DtDWebhook } from "../DtDWebhook.js";
 import type { Task } from "../tasks.js";
-import { fixMD, sleep } from "./../helpers/index.js";
-import { AddOnline } from "./database.js";
+import { fixMD, sleep, sleepS } from "./../helpers/index.js";
+import Database from "./database.js";
 import type { Service } from "./index.js";
 
 const Logger = log4js.getLogger("Server Info");
@@ -27,15 +27,14 @@ async function start() {
     Logger.info("Started");
     Logger.info(`Connected to ${serverInfo.srvRecord?.host}:${serverInfo.srvRecord?.port}`);
 
-    const serverWait = 60 * 1000;
     for (; ;) {
         try {
             await CheckServer();
-            const ps = 4 * 60 * 1000 * (serverInfo.players.online / serverInfo.players.max);
-            await sleep(serverWait + ps);
+            const ps = 4 * 60 * (serverInfo.players.online / serverInfo.players.max);
+            await sleepS(60 + ps);
         } catch (error) {
             Logger.error(error);
-            await sleep(serverWait * 2);
+            await sleepS(120);
         }
     }
 }
@@ -103,7 +102,7 @@ async function CheckServer(): Promise<void> {
             playersList.push(`~~${fixMD(player)}~~`);
         });
         playersOnline = playersOnlineNew;
-        AddOnline(playersOnline.size, new Date());
+        Database.addOnline(playersOnline.size, new Date());
 
         const Embed = new EmbedBuilder()
             .setDescription(playersList.join(" "))

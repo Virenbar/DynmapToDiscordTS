@@ -6,7 +6,8 @@
         "resolveJsonModule": true,
         "declaration": true,
         "noUncheckedIndexedAccess": false,
-        "moduleResolution": "NodeNext"
+        "moduleResolution": "NodeNext",
+        "module": "NodeNext"
     },
     "include": [
         "src/**/*"

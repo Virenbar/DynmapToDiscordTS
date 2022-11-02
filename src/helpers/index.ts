@@ -1,5 +1,6 @@
-export * from "./fetchHelper.js";
-export * from "./stringHelper.js";
+export * from "./fetch.js";
+export * from "./meta.js";
+export * from "./string.js";
 
 /**
  * Sleep for ms

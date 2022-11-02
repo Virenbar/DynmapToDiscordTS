@@ -2,7 +2,7 @@ import log4js from "log4js";
 import mysql from "mysql2/promise";
 import type { DtDWebhook } from "../DtDWebhook.js";
 import type { Task } from "../tasks.js";
-import { sleep } from "./../helpers/index.js";
+import { sleepS } from "./../helpers/index.js";
 import type { Service } from "./index.js";
 
 const Logger = log4js.getLogger("Database");
@@ -12,29 +12,28 @@ let Connection: mysql.Connection;
 
 const Online: Online[] = [];
 const Messages: Message[] = [];
+const Events: Event[] = [];
 
 function initialize(client: DtDWebhook) {
     Client = client;
 }
 
 async function start() {
-    reload();
     if (!Client.config.dynmap) {
-        Logger.warn("Dynmap URL not set. Service disabled");
+        Logger.warn("Dynmap URL not set. Task disabled");
         return;
     }
     Connection = await mysql.createConnection(Config);
     await Connection.connect();
     Logger.info("Started");
 
-    const serverWait = 30 * 1000;
     for (; ;) {
         try {
             SaveToDB();
-            await sleep(serverWait);
+            await sleepS(30);
         } catch (error) {
             Logger.error(error);
-            await sleep(serverWait * 2);
+            await sleepS(60);
         }
     }
 }
@@ -44,7 +43,6 @@ function reload() {
         user: process.env["user"] as string,
         database: "chat_log"
     };
-    Logger.info("Reloaded");
 }
 
 async function SaveToDB() {
@@ -58,12 +56,16 @@ async function SaveToDB() {
     Messages.length = 0;
 }
 
-export function AddOnline(online: number, date: Date) {
+function addOnline(online: number, date: Date) {
     Online.push({ online: online, date: date });
 }
 
-export function AddMessage(message: Message) {
+function addMessage(message: Message) {
     Messages.push(message);
+}
+
+function addEvent() {
+    Events.push();
 }
 
 interface Message {
@@ -80,6 +82,13 @@ interface Online {
     online: number,
     date: Date
 }
+
+interface Event {
+    player: string
+    event: string
+}
+
 const name = "Database";
-const Database: Service & Task = { name, initialize, reload, start };
+const f: Service & Task = { name, initialize, reload, start };
+const Database = { ...f, addMessage, addOnline, addEvent };
 export default Database;

@@ -13,5 +13,6 @@
         "appenders",
         "Dynmap",
         "minecraft"
-    ]
+    ],
+    "typescript.tsdk": "node_modules\\typescript\\lib"
 }

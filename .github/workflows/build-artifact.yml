@@ -9,21 +9,20 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - name: Setup Node.js 16.x
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 16.x
+          cache: "yarn"
 
       - name: Build Package
         run: |
           yarn install --immutable --immutable-cache --check-cache
           yarn run build
+
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
