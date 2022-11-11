@@ -30,4 +30,3 @@ Client.reload();
 Client.sendTitle();
 Client.logger.info(`Running as ${Client.id}`);
 Tasks.start();
-

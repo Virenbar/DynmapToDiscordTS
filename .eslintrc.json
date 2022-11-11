@@ -27,12 +27,6 @@
             {
                 "max": 1
             }
-        ],
-        "lines-around-comment": [
-            "warn",
-            {
-                "beforeLineComment": true
-            }
         ]
     }
 }
