@@ -1,14 +1,16 @@
-import { Client, Embed, IntentsBitField, TextChannel } from "discord.js";
-import { createWriteStream } from "fs";
+import { Client, Collection, Embed, IntentsBitField, Message as DMessage, TextChannel } from "discord.js";
+import { createWriteStream, WriteStream } from "fs";
 import { tryParseInt } from "./helpers/index.js";
 import type { Event, Message } from "./models/index.js";
 
 const Messages: Message[] = [];
 const Events: Event[] = [];
+let MFile: WriteStream;
+let EFile: WriteStream;
 const RFooter = /(?<U>\w{2,})( (?<D>\w*)?\((?<X>-?\d+) (?<Y>-?\d+) (?<Z>-?\d+)\))?/g;
 const RLogin = /__([\w\\]+)__/g;
 const RLogout = /~~([\w\\]+)~~/g;
-const EndID = "538065995689099275";
+const FirstID = "538065995689099275";
 
 async function start(token: string) {
     const myIntents = new IntentsBitField();
@@ -16,23 +18,31 @@ async function start(token: string) {
     const Bot = new Client({ intents: myIntents });
     await Bot.login(token);
 
-    const M = createWriteStream("messages.csv");
+    MFile = createWriteStream("messages.tsv");
+    MFile.write("server\tuser\tuuid\tmessage\ttimestamp\tdimension\tX\tY\tZ\n");
+    EFile = createWriteStream("events.tsv");
+    EFile.write("name\ttype\ttimestamp\n");
 
-    const E = createWriteStream("events.csv");
-
+    let Count = 0;
     const Channel = await Bot.channels.fetch("443434961895292929") as TextChannel;
-    const Messages = await Channel.messages.fetch();
+    let Messages: Collection<string, DMessage>;
+    let LastID = FirstID;
+    while (LastID) {
+        Messages = await Channel.messages.fetch({ after: LastID, limit: 100 });
+        LastID = Messages.firstKey() as string;
 
-    const LastID = Messages.lastKey();
-    const Embeds = Array.from(Messages.values()).flatMap(m => m.embeds);
-
-    processEmbeds(Embeds);
-
-    console.log(Embeds[0], LastID);
-
+        const Embeds = Array.from(Messages.values()).flatMap(m => m.embeds);
+        processEmbeds(Embeds);
+        console.log(Count, LastID);
+        Count++;
+        if (Count == 50) { break; }
+    }
+    MFile.close();
+    EFile.close();
 }
 
 function processEmbeds(embeds: Embed[]) {
+    embeds.reverse();
     for (const embed of embeds) {
         if (
             !embed.description ||
@@ -50,7 +60,17 @@ function processEmbeds(embeds: Embed[]) {
                 Events.push({ user, type: "left", timestamp: embed.timestamp });
             }
         } else if (embed.footer.text.startsWith("Server")) {
-            continue;
+            Messages.push({
+                server: "minecrafting.ru",
+                user: "Server",
+                uuid: null,
+                message: embed.description,
+                timestamp: embed.timestamp,
+                dimension: null,
+                X: null,
+                Y: null,
+                Z: null
+            });
         } else if (embed.footer.text == "Unknown") {
             continue;
         } else if (embed.footer.text == "Впервые вошел") {
@@ -76,7 +96,7 @@ function processEmbeds(embeds: Embed[]) {
                 continue;
             }
             const user = Match.groups["U"];
-            const dimension = Match.groups["D"];
+            const dimension = Match.groups["D"] ?? null;
             const X = tryParseInt(Match.groups["X"]);
             const Y = tryParseInt(Match.groups["Y"]);
             const Z = tryParseInt(Match.groups["Z"]);
@@ -94,9 +114,14 @@ function processEmbeds(embeds: Embed[]) {
             });
         }
     }
-    console.log(Messages);
-    console.log(Events);
-    Messages.map(M => `${M.server},${M.uuid},${M.user},${M.message},${M.timestamp},${M.dimension},${M.X},${M.Y},${M.Z}\n`);
+    Messages
+        .map(M => `${M.server}\t${M.uuid}\t${M.user}\t${M.message}\t${M.timestamp}\t${M.dimension}\t${M.X}\t${M.Y}\t${M.Z}\n`)
+        .forEach(S => MFile.write(S));
+    Events
+        .map(E => `${E.user}\t${E.type}\t${E.timestamp}\n`)
+        .forEach(S => EFile.write(S));
+    Messages.length = 0;
+    Events.length = 0;
 }
 
 const Export = { start };
