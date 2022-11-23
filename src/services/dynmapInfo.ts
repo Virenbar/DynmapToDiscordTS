@@ -5,9 +5,8 @@ import { FetchError } from "node-fetch";
 import type { DtDWebhook } from "../DtDWebhook.js";
 import { fixMD, getJSON, sleepS } from "../helpers/index.js";
 import type { Profile } from "../models/index.js";
-import type { Task } from "../tasks.js";
 import Database from "./database.js";
-import type { Service } from "./index.js";
+import type { TaskService } from "./index.js";
 
 const Logger = log4js.getLogger("Dynmap Info");
 let Client: DtDWebhook;
@@ -15,7 +14,7 @@ let FileURL: string;
 
 let lostConnection = false;
 let dynmapInfo: DynmapFile;
-let timestamp = 0; //420000
+let timestamp = 0;
 
 const dims: { [dim: string]: string } = {
     "world": "O",//"🟢",
@@ -29,8 +28,11 @@ function initialize(client: DtDWebhook) {
     Client = client;
 }
 
+function reload() {
+    FileURL = Client.config.dynmap ?? "";
+}
+
 async function start() {
-    reload();
     if (FileURL == "") {
         Logger.warn("Dynmap URL not set. Task disabled");
         return;
@@ -48,10 +50,6 @@ async function start() {
             await sleepS(60);
         }
     }
-}
-function reload() {
-    FileURL = Client.config.dynmap ?? "";
-    Logger.info("Reloaded");
 }
 
 async function RefreshInfo() {
@@ -80,13 +78,15 @@ async function PlayerEmbed(event: ChatEvent) {
         position = `${D}(${player?.x} ${player?.y} ${player?.z})`;
     }
     Database.addMessage({
-        player: account,
+        server: "",
+        user: account,
         uuid: uuid,
-        text: event.message,
+        message: event.message,
+        timestamp: new Date(event.timestamp),
         dimension: player?.world ?? null,
-        x: player?.x ?? null,
-        y: player?.y ?? null,
-        z: player?.z ?? null
+        X: player?.x ?? null,
+        Y: player?.y ?? null,
+        Z: player?.z ?? null
     });
 
     //--Steve 00000000-0000-0000-0000-000000000000 Alex ..0001
@@ -217,5 +217,5 @@ interface ChatEvent extends Event {
     channel: string
 }
 const name = "Dynmap Info";
-const DynmapInfo: Service & Task = { name, initialize, reload, start };
+const DynmapInfo: TaskService = { name, initialize, reload, start };
 export default DynmapInfo;

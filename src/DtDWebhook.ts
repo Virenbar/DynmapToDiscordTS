@@ -19,6 +19,9 @@ export class DtDWebhook extends WebhookClient {
         Config.loadConfig();
         Services.reload();
     }
+    public start() {
+        Services.start();
+    }
     public sendTitle() {
         let description = `Version: ${meta.version}`;
         description += `\nServer: ${this.config.host}:${this.config.port}`;

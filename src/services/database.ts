@@ -1,9 +1,9 @@
 import log4js from "log4js";
 import mysql from "mysql2/promise";
 import type { DtDWebhook } from "../DtDWebhook.js";
-import type { Task } from "../tasks.js";
-import { sleepS } from "./../helpers/index.js";
-import type { Service } from "./index.js";
+import { sleepS } from "../helpers/index.js";
+import type { Event, Message, Online } from "../models/index.js";
+import type { TaskService } from "./index.js";
 
 const Logger = log4js.getLogger("Database");
 let Client: DtDWebhook;
@@ -16,6 +16,14 @@ const Events: Event[] = [];
 
 function initialize(client: DtDWebhook) {
     Client = client;
+}
+
+function reload() {
+    Config = {
+        host: process.env["host"] as string,
+        user: process.env["user"] as string,
+        database: "chat_log"
+    };
 }
 
 async function start() {
@@ -37,58 +45,31 @@ async function start() {
         }
     }
 }
-function reload() {
-    Config = {
-        host: process.env["host"] as string,
-        user: process.env["user"] as string,
-        database: "chat_log"
-    };
-}
 
 async function SaveToDB() {
     for (const item of Online) {
-        await Connection.query("call insertOnline(?,?)", [item.online, item.date]);
+        await Connection.query("call insertOnline(?,?)", [item.timestamp, item.online]);
     }
     Online.length = 0;
     for (const item of Messages) {
-        await Connection.query("call insertMessage(?,?)", [item.player, item.text]);
+        await Connection.query("call insertMessage(?,?)", [item.user, item.message]);
     }
     Messages.length = 0;
 }
 
-function addOnline(online: number, date: Date) {
-    Online.push({ online: online, date: date });
+function addOnline(timestamp: Date, online: number) {
+    Online.push({ timestamp, online });
 }
 
 function addMessage(message: Message) {
     Messages.push(message);
 }
 
-function addEvent() {
-    Events.push();
-}
-
-interface Message {
-    player: string
-    uuid: string
-    text: string
-    dimension: string | null
-    x: number | null
-    y: number | null
-    z: number | null
-}
-
-interface Online {
-    online: number,
-    date: Date
-}
-
-interface Event {
-    player: string
-    event: string
+function addEvent(event: Event) {
+    Events.push(event);
 }
 
 const name = "Database";
-const f: Service & Task = { name, initialize, reload, start };
-const Database = { ...f, addMessage, addOnline, addEvent };
+const TS: TaskService = { name, initialize, reload, start };
+const Database = { ...TS, SaveToDB, addMessage, addOnline, addEvent } as const;
 export default Database;

@@ -4,10 +4,9 @@ import log4js from "log4js";
 import { JavaStatusResponse, status } from "minecraft-server-util";
 import { FetchError } from "node-fetch";
 import type { DtDWebhook } from "../DtDWebhook.js";
-import type { Task } from "../tasks.js";
 import { fixMD, sleep, sleepS } from "./../helpers/index.js";
 import Database from "./database.js";
-import type { Service } from "./index.js";
+import type { TaskService } from "./index.js";
 
 const Logger = log4js.getLogger("Server Info");
 let Client: DtDWebhook;
@@ -19,6 +18,11 @@ let playersOnline: Set<string> = new Set<string>();
 
 function initialize(client: DtDWebhook) {
     Client = client;
+}
+
+function reload() {
+    Server.host = Client.config.host;
+    Server.port = Client.config.port ?? undefined;
 }
 
 async function start() {
@@ -37,11 +41,6 @@ async function start() {
             await sleepS(120);
         }
     }
-}
-function reload() {
-    Server.host = Client.config.host;
-    Server.port = Client.config.port ?? undefined;
-    Logger.info("Reloaded");
 }
 
 async function refreshInfo() {
@@ -102,7 +101,7 @@ async function CheckServer(): Promise<void> {
             playersList.push(`~~${fixMD(player)}~~`);
         });
         playersOnline = playersOnlineNew;
-        Database.addOnline(playersOnline.size, new Date());
+        Database.addOnline(new Date(), playersOnline.size);
 
         const Embed = new EmbedBuilder()
             .setDescription(playersList.join(" "))
@@ -126,5 +125,5 @@ async function CheckServer(): Promise<void> {
     }
 }
 const name = "Dynmap Info";
-const ServerInfo: Service & Task = { name, initialize, reload, start };
+const ServerInfo: TaskService = { name, initialize, reload, start };
 export default ServerInfo;

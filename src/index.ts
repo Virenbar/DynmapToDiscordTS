@@ -2,7 +2,6 @@ import "dotenv/config";
 import log4js from "log4js";
 import { DtDWebhook } from "./DtDWebhook.js";
 import Export from "./export.js";
-import Tasks from "./tasks.js";
 
 const DEBUG = process.env["DEBUG"];
 log4js.configure({
@@ -29,4 +28,4 @@ Client.initialize();
 Client.reload();
 Client.sendTitle();
 Client.logger.info(`Running as ${Client.id}`);
-Tasks.start();
+Client.start();
