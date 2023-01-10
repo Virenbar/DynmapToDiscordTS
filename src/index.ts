@@ -1,34 +1,29 @@
-import { configure, getLogger } from "log4js"
-import { sendMessage } from './lib/discord'
-import loadConfig, { config } from "./lib/config"
-import Server from './modules/serverInfo'
-import Dynmap from './modules/dynmapInfo'
+import "dotenv/config";
+import log4js from "log4js";
+import { DtDWebhook } from "./DtDWebhook.js";
+//import Export from "./export.js";
 
-loadConfig()
-configure({
+const DEBUG = process.env["DEBUG"];
+log4js.configure({
     appenders: {
-        file: { type: "file", filename: "logs/debug.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
         console: { type: "console", layout: { type: "colored" } },
-        "err-filter": { type: 'logLevelFilter', appender: 'console', level: 'error' }
+        fileDebug: { type: "file", filename: "logs/debug.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
+        fileError: { type: "file", filename: "logs/error.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
+        infoConsole: { type: "logLevelFilter", appender: "console", level: "info" },
+        errorFile: { type: "logLevelFilter", appender: "fileError", level: "error" }
     },
     categories: {
-        default: { appenders: ["file", "console"], level: "debug" }
+        default: { appenders: ["fileDebug", "errorFile", DEBUG ? "console" : "infoConsole"], level: "debug" }
     }
 });
-export const logger = getLogger('DtD')
-const name = 'Dynmap to Discord'
-const version = '4.1'
 
-async function Init() {
-    logger.info('Starting')
-    await sendMessage({
-        "title": name,
-        "message": `Version: ${version}\nServer: ${config.host}:${config.port}\nDynmap: ${config.dynmap}`,
-        "timestamp": new Date().toISOString()
-    })
-    await Server()
-    await Dynmap()
-    logger.info('Ready')
-}
+//const e = process.env["export"] as string;
+//await Export.start(e);
 
-Init()
+const id = process.env["id"] as string;
+const token = process.env["token"] as string;
+const Client = new DtDWebhook(id, token);
+
+Client.initialize();
+Client.reload();
+Client.start();

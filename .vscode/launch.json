@@ -7,13 +7,14 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Launch Bot",
             "skipFiles": [
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\build\\index.js",
+            "preLaunchTask": "tsc: build",
             "outFiles": [
-                "${workspaceFolder}/**/*.js"
+                "${workspaceFolder}/build/**/*.js"
             ]
         }
     ]
