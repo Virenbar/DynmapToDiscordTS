@@ -2,10 +2,9 @@ import { EmbedBuilder } from "discord.js";
 import _ from "lodash";
 import log4js from "log4js";
 import { JavaStatusResponse, status } from "minecraft-server-util";
-import { FetchError } from "node-fetch";
 import type { DtDWebhook } from "../DtDWebhook.js";
-import { fixMD, sleep, sleepS } from "./../helpers/index.js";
-import Database from "./database.js";
+import { FetchError, fixMD, sleep, sleepS } from "./../helpers/index.js";
+//import Database from "./database.js";
 import type { TaskService } from "./index.js";
 
 const Logger = log4js.getLogger("Server Info");
@@ -101,7 +100,7 @@ async function CheckServer(): Promise<void> {
             playersList.push(`~~${fixMD(player)}~~`);
         });
         playersOnline = playersOnlineNew;
-        Database.addOnline(new Date(), playersOnline.size);
+        //Database.addOnline(new Date(), playersOnline.size);
 
         const Embed = new EmbedBuilder()
             .setDescription(playersList.join(" "))
@@ -115,7 +114,7 @@ async function CheckServer(): Promise<void> {
             Logger.info("Connection restored");
         }
     } catch (error) {
-        if (error instanceof FetchError && (error.code == "ECONNREFUSED" || error.code == "ETIMEDOUT")) {
+        if (error instanceof FetchError) {
             lostConnection = true;
             Logger.warn("Connection lost");
             Logger.warn(error);

@@ -1,7 +1,7 @@
 import "dotenv/config";
 import log4js from "log4js";
 import { DtDWebhook } from "./DtDWebhook.js";
-import Export from "./export.js";
+//import Export from "./export.js";
 
 const DEBUG = process.env["DEBUG"];
 log4js.configure({
@@ -16,8 +16,9 @@ log4js.configure({
         default: { appenders: ["fileDebug", "errorFile", DEBUG ? "console" : "infoConsole"], level: "debug" }
     }
 });
-const e = process.env["export"] as string;
-await Export.start(e);
+
+//const e = process.env["export"] as string;
+//await Export.start(e);
 
 const id = process.env["id"] as string;
 const token = process.env["token"] as string;

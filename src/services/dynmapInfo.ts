@@ -1,11 +1,10 @@
 import { EmbedBuilder } from "discord.js";
 import _ from "lodash";
 import log4js from "log4js";
-import { FetchError } from "node-fetch";
 import type { DtDWebhook } from "../DtDWebhook.js";
-import { fixMD, getJSON, sleepS } from "../helpers/index.js";
+import { FetchError, fixMD, getJSON, sleepS } from "../helpers/index.js";
 import type { Profile } from "../models/index.js";
-import Database from "./database.js";
+//import Database from "./database.js";
 import type { TaskService } from "./index.js";
 
 const Logger = log4js.getLogger("Dynmap Info");
@@ -77,6 +76,7 @@ async function PlayerEmbed(event: ChatEvent) {
         const D = dims[player?.world] ?? "";
         position = `${D}(${player?.x} ${player?.y} ${player?.z})`;
     }
+    /*
     Database.addMessage({
         server: "",
         user: account,
@@ -88,6 +88,7 @@ async function PlayerEmbed(event: ChatEvent) {
         Y: player?.y ?? null,
         Z: player?.z ?? null
     });
+    */
 
     //--Steve 00000000-0000-0000-0000-000000000000 Alex ..0001
     const Embed = new EmbedBuilder()
@@ -105,19 +106,19 @@ function PluginEmbed(event: ChatEvent) {
     const Embed = new EmbedBuilder();
     if (event.message.startsWith("[Server]")) {
         Embed.setDescription(event.message.substr(8))
-            .setColor(0xFF55FF)
+            .setColor("#FF55FF")
             .setFooter({ text: "Server" });
     } else if (event.message.startsWith("* ")) {
         Embed.setDescription(event.message)
-            .setColor(0xFFFF55)
+            .setColor("#FFFF55")
             .setFooter({ text: "/me" });
     } else if (event.message.match(/впервые вошел/)) {
         Embed.setDescription(event.message)
-            .setColor(0xFBA800)
+            .setColor("#FBA800")
             .setFooter({ text: "Впервые вошел" });
     } else if (!event.message.match(/вошел|вышел/i)) {
         Embed.setDescription(event.message)
-            .setColor(0xFFFF55)
+            .setColor("#FFFF55")
             .setFooter({ text: "Unknown" });
     } else {
         return null;
@@ -129,7 +130,7 @@ function PluginEmbed(event: ChatEvent) {
 function WebEmbed(event: ChatEvent) {
     const Embed = new EmbedBuilder()
         .setDescription(event.message)
-        .setColor(0xFFFFFF)
+        .setColor("#FFFFFF")
         .setFooter({ text: `[Web]${event.playerName}` })
         .setTimestamp(new Date(event.timestamp));
     return Embed;
@@ -173,7 +174,7 @@ async function CheckDynmap(): Promise<void> {
             Logger.info("Connection restored");
         }
     } catch (error) {
-        if (error instanceof FetchError && (error.code == "ECONNREFUSED" || error.code == "ETIMEDOUT")) {
+        if (error instanceof FetchError) {
             lostConnection = true;
             Logger.warn("Connection lost");
             Logger.warn(error);

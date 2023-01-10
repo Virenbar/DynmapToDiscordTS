@@ -27,6 +27,14 @@
             {
                 "max": 1
             }
+        ],
+        "padding-line-between-statements": [
+            "warn",
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "function"
+            }
         ]
     }
 }

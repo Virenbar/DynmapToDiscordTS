@@ -1,6 +1,6 @@
 import log4js from "log4js";
 import type { DtDWebhook } from "../DtDWebhook.js";
-import Database from "./database.js";
+//import Database from "./database.js";
 import DynmapInfo from "./dynmapInfo.js";
 import ServerInfo from "./serverInfo.js";
 export const Logger = log4js.getLogger("Service");
@@ -9,13 +9,13 @@ const Tasks: Task[] = [];
 
 function initialize(client: DtDWebhook): void {
     Logger.debug("Initializing");
-    Tasks.push(...[ServerInfo, DynmapInfo, Database]);
-    Services.push(...[ServerInfo, DynmapInfo, Database]);
+    Services.push(...[ServerInfo, DynmapInfo]);
     Services.forEach(M => {
         M.initialize(client);
         Logger.debug(`Initialized: ${M.name}`);
     });
     Logger.debug("Initializing done");
+    Tasks.push(...[ServerInfo, DynmapInfo]);
 }
 
 function reload() {

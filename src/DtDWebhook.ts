@@ -7,7 +7,7 @@ import Services from "./services/index.js";
 export class DtDWebhook extends WebhookClient {
     constructor(id: string, token: string) {
         super({ id: id, token: token });
-        this.config = Config.Config;
+        this.config = Config.config;
         this.logger = log4js.getLogger("DtD");
     }
     public config;
