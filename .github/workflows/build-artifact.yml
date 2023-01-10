@@ -31,5 +31,5 @@ jobs:
           path: |
             build
             package.json
-            package-lock.json
+            yarn.lock
           if-no-files-found: error
