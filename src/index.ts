@@ -6,9 +6,9 @@ import { DtDWebhook } from "./DtDWebhook.js";
 const DEBUG = process.env["DEBUG"];
 log4js.configure({
     appenders: {
+        console: { type: "console", layout: { type: "colored" } },
         fileDebug: { type: "file", filename: "logs/debug.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
         fileError: { type: "file", filename: "logs/error.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
-        console: { type: "console", layout: { type: "colored" } },
         infoConsole: { type: "logLevelFilter", appender: "console", level: "info" },
         errorFile: { type: "logLevelFilter", appender: "fileError", level: "error" }
     },
@@ -24,9 +24,6 @@ const id = process.env["id"] as string;
 const token = process.env["token"] as string;
 const Client = new DtDWebhook(id, token);
 
-Client.logger.info("Initializing");
 Client.initialize();
 Client.reload();
-Client.sendTitle();
-Client.logger.info(`Running as ${Client.id}`);
 Client.start();

@@ -6,9 +6,9 @@ import process, { memoryUsage } from "process";
 const pack = new URL("../../package.json", import.meta.url);
 const json = JSON.parse(fs.readFileSync(pack, "utf8"));
 const version = json["version"] as string;
+const discord = (json["dependencies"]["discord.js"] as string).replace("^", "");
 const repository = json["repository"]["url"] as string;
 const dependencies = Object.keys(json["dependencies"]).length;
-
 // System
 const cpu = os.cpus();
 const CPU = `${cpu[0].model} ${cpu.length}x${cpu[0].speed} MHz`;
@@ -29,10 +29,11 @@ function memory() {
 }
 export const meta = {
     version,
+    discord,
     repository,
     dependencies,
     nodeVersion,
     CPU,
     OS,
     memory
-};
+} as const;

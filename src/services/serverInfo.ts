@@ -20,15 +20,17 @@ function initialize(client: DtDWebhook) {
 }
 
 function reload() {
-    Server.host = Client.config.host;
-    Server.port = Client.config.port ?? undefined;
+    Server = {
+        host: Client.config.host,
+        port: Client.config.port ?? undefined
+    };
 }
 
 async function start() {
     await refreshInfo();
     playersOnline = await getPlayerList();
     Logger.info("Started");
-    Logger.info(`Connected to ${serverInfo.srvRecord?.host}:${serverInfo.srvRecord?.port}`);
+    Logger.info(`Connected to ${srvRecord()}`);
 
     for (; ;) {
         try {
@@ -46,16 +48,18 @@ async function refreshInfo() {
     serverInfo = await status(Server.host, Server.port);
 }
 
+async function srvRecord() {
+    await refreshInfo();
+    return `${serverInfo.srvRecord?.host}:${serverInfo.srvRecord?.port}`;
+}
+
 function playersSample(): string[] {
     if (serverInfo.players.sample == null) {
         return [];
     }
     let players = serverInfo.players.sample.map(p => p.name);
-    const counts: { [name: string]: number } = {};
-    players = players.map(name => {
-        counts[name] = (counts[name] || 0) + 1;
-        return `${name} #${counts[name]}`;
-    });
+    let anonymous = 1;
+    players = players.map(name => name == "Anonymous Player" ? `${name} #${anonymous++}` : name);
     return players;
 }
 
@@ -123,6 +127,10 @@ async function CheckServer(): Promise<void> {
         }
     }
 }
+
 const name = "Dynmap Info";
 const ServerInfo: TaskService = { name, initialize, reload, start };
-export default ServerInfo;
+export default {
+    ...ServerInfo,
+    srvRecord
+} as const;
