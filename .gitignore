@@ -105,4 +105,4 @@ dist
 
 # builded src
 build/
-*.tsv
+config.json

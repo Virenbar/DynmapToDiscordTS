@@ -17,11 +17,10 @@ log4js.configure({
     }
 });
 
-//const e = process.env["export"] as string;
+//const e = process.env["EXPORT"] as string;
 //await Export.start(e);
 
-const id = process.env["id"] as string;
-const token = process.env["token"] as string;
-const Client = new DtDWebhook(id, token);
+const url = process.env["URL"] as string;
+const Client = new DtDWebhook(url);
 
 Client.start();

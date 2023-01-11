@@ -152,22 +152,20 @@ async function ChatEmbed(event: ChatEvent) {
 async function CheckDynmap(): Promise<void> {
     try {
         await RefreshInfo();
-        const Embeds: EmbedBuilder[] = [];
+        const embeds: EmbedBuilder[] = [];
         for (const event of dynmapInfo.updates) {
             if (event.timestamp > timestamp && event.type != "tile") {
                 if (event.type == "chat") {
                     const Embed = await ChatEmbed(event as ChatEvent);
-                    if (Embed != null) { Embeds.push(Embed); }
+                    if (Embed != null) { embeds.push(Embed); }
                 }
             }
-            if (Embeds.length == 10) {
-                await Client.send({ embeds: Embeds });
-                Embeds.length = 0;
+            if (embeds.length == 10) {
+                sendEmbeds(embeds);
+
             }
         }
-        if (Embeds.length > 0) {
-            await Client.send({ embeds: Embeds });
-        }
+        if (embeds.length > 0) { sendEmbeds(embeds); }
         timestamp = dynmapInfo.timestamp;
         if (lostConnection) {
             lostConnection = false;
@@ -182,6 +180,17 @@ async function CheckDynmap(): Promise<void> {
             throw error;
         }
     }
+}
+
+async function sendEmbeds(embeds: EmbedBuilder[]) {
+    const tags = embeds.flatMap(E => {
+        //const M = E.data.description?.match(/@.+#\d{4}/g);
+        const M = E.data.description?.match(/<@\d+>/g);
+        return M ? [...M] : [];
+    });
+    const content = tags.length ? _.uniq(tags).join(" ") : "";
+    await Client.send({ embeds, content });
+    embeds.length = 0;
 }
 
 interface DynmapFile {

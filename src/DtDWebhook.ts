@@ -6,9 +6,9 @@ import Services from "./services/index.js";
 import ServerInfo from "./services/serverInfo.js";
 
 export class DtDWebhook extends WebhookClient {
-    constructor(id: string, token: string) {
+    constructor(url: string) {
         super(
-            { id: id, token: token },
+            { url },
             { allowedMentions: { parse: ["users"] } }
         );
         this.config = Config.config;
@@ -29,8 +29,8 @@ export class DtDWebhook extends WebhookClient {
         Services.start();
     }
     public async sendTitle() {
-        let description = `Version: ${meta.version} (Node: ${meta.nodeVersion})`;
-        description += `\nDiscord.js: ${meta.discord}`;
+        let description = `Version: ${meta.version}`;
+        description += `\nNode: ${meta.nodeVersion} Discord.js: v${meta.discord}`;
         description += `\nServer: ${await ServerInfo.srvRecord()}`;
         description += `\nDynmap: ${this.config.dynmap}`;
         const Embed = new EmbedBuilder()

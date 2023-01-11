@@ -30,7 +30,7 @@ async function start() {
     await refreshInfo();
     playersOnline = await getPlayerList();
     Logger.info("Started");
-    Logger.info(`Connected to ${srvRecord()}`);
+    Logger.info(`Connected to ${await srvRecord()}`);
 
     for (; ;) {
         try {
