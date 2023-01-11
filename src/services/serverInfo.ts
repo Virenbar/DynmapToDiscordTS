@@ -57,10 +57,9 @@ function playersSample(): string[] {
     if (serverInfo.players.sample == null) {
         return [];
     }
-    let players = serverInfo.players.sample.map(p => p.name);
+    const players = serverInfo.players.sample.map(p => p.name);
     let anonymous = 1;
-    players = players.map(name => name == "Anonymous Player" ? `${name} #${anonymous++}` : name);
-    return players;
+    return players.map(name => name == "Anonymous Player" ? `Anonymous#${anonymous++}` : name);
 }
 
 async function getPlayerList(): Promise<Set<string>> {

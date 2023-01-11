@@ -24,6 +24,4 @@ const id = process.env["id"] as string;
 const token = process.env["token"] as string;
 const Client = new DtDWebhook(id, token);
 
-Client.initialize();
-Client.reload();
 Client.start();

@@ -4,23 +4,26 @@ import Config from "./config.js";
 import { meta } from "./helpers/index.js";
 import Services from "./services/index.js";
 import ServerInfo from "./services/serverInfo.js";
+
 export class DtDWebhook extends WebhookClient {
     constructor(id: string, token: string) {
-        super({ id: id, token: token });
+        super(
+            { id: id, token: token },
+            { allowedMentions: { parse: ["users"] } }
+        );
         this.config = Config.config;
         this.logger = log4js.getLogger("DtD");
     }
     public config;
     public logger;
-    public initialize() {
-        this.logger.info("Initializing");
-        Services.initialize(this);
-    }
     public reload() {
         Config.loadConfig();
         Services.reload();
     }
     public start() {
+        this.logger.info("Initializing");
+        Services.initialize(this);
+        this.reload();
         this.sendTitle();
         this.logger.info(`Running as ${this.id}`);
         Services.start();
