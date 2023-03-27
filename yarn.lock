@@ -1499,10 +1499,10 @@ minecraft-motd-util@^1.1.9:
   resolved "https://registry.yarnpkg.com/minecraft-motd-util/-/minecraft-motd-util-1.1.12.tgz#b1e3627329a770c015e5c32261510eb9ff0a2f81"
   integrity sha512-5TuTRjrRupSTruea0nRC37r0FdhkS1O4wIJKAYfwJRCQd/X4Zyl/dVIs96h9UVW6N8jhIuz9pNkrDsqyN7VBdA==
 
-minecraft-server-util@^5.3.2:
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/minecraft-server-util/-/minecraft-server-util-5.3.2.tgz#d037cacffc9cec9d9af2e60012f3082064ca9a83"
-  integrity sha512-ZI7TUV3BqJjXKtCdadJhjAgc5vXFvBvdrjbzbQ/XGLRgzXGUQS6FfhJDGoWsae4lwT/Wga+skp++ReHh1E6crg==
+minecraft-server-util@^5.4.1:
+  version "5.4.1"
+  resolved "https://registry.yarnpkg.com/minecraft-server-util/-/minecraft-server-util-5.4.1.tgz#0b8ad91792d5228fc52e94b1b17b99eebfde041d"
+  integrity sha512-rZipjbU0l57RlfRsCEK0qhGc40tVPKm/jbqLuFZTFsOfYdqduMDhW2wWKtypO+VKy9sctLDbL42fKJM6pZh/2g==
   dependencies:
     minecraft-motd-util "^1.1.9"
 
