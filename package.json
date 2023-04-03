@@ -16,7 +16,7 @@
     "start:dev": "yarn build && node build/index.js"
   },
   "dependencies": {
-    "discord.js": "^14.7.1",
+    "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
     "lodash": "^4.17.21",
     "log4js": "^6.7.1",
