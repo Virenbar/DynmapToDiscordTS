@@ -5,24 +5,25 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
-
+  workflow_call:
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js 18.x
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: 20.x
           cache: "yarn"
 
       - name: Build Package
         run: |
           yarn install --immutable --immutable-cache --check-cache
-          yarn run build
+          yarn build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
