@@ -3,12 +3,22 @@
     "extends": [
         "config:recommended",
         "group:allNonMajor",
-        ":semanticCommitTypeAll(chore)"
+        ":semanticCommitTypeAll(chore)",
+        ":meteor"
     ],
-    "meteor": {
-        "enabled": false
-    },
     "rangeStrategy": "bump",
+    "packageRules": [
+        {
+            "description": "Ignore engines",
+            "matchPackageNames": [
+                "node"
+            ],
+            "matchDepTypes": [
+                "engines"
+            ],
+            "rangeStrategy": "auto"
+        }
+    ],
     "schedule": [
         "every weekend"
     ],
