@@ -7,7 +7,6 @@ export async function get<T>(url: string) {
     if (!response.ok) {
         Logger.error(await response.text());
         throw new FetchError(response);
-        //throw new Error(`${response.status}: ${response.statusText}`);
     }
     return await response.json() as T;
 }

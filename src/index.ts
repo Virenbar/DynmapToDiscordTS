@@ -7,13 +7,13 @@ const DEBUG = process.env["DEBUG"];
 log4js.configure({
     appenders: {
         console: { type: "console", layout: { type: "colored" } },
-        fileDebug: { type: "file", filename: "logs/debug.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
+        fileInfo: { type: "file", filename: "logs/info.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
         fileError: { type: "file", filename: "logs/error.log", maxLogSize: 1024 * 1024 * 10, backups: 5, compress: true },
-        infoConsole: { type: "logLevelFilter", appender: "console", level: "info" },
-        errorFile: { type: "logLevelFilter", appender: "fileError", level: "error" }
+        info: { type: "logLevelFilter", appender: "fileInfo", level: "info" },
+        error: { type: "logLevelFilter", appender: "fileError", level: "error" }
     },
     categories: {
-        default: { appenders: ["fileDebug", "errorFile", DEBUG ? "console" : "infoConsole"], level: "debug" }
+        default: { appenders: ["info", "error", "console"], level: DEBUG ? "debug" : "info" }
     }
 });
 
@@ -22,5 +22,4 @@ log4js.configure({
 
 const url = process.env["URL"] as string;
 const Client = new DtDWebhook(url);
-
 Client.start();

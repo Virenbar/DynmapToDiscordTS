@@ -5,7 +5,7 @@ import type { DtDWebhook } from "../DtDWebhook.js";
 import { FetchError, fixMD, getJSON, sleepS } from "../helpers/index.js";
 import type { Profile } from "../models/index.js";
 //import Database from "./database.js";
-import type { TaskService } from "./index.js";
+import type { Service } from "./index.js";
 
 const Logger = log4js.getLogger("Dynmap Info");
 let Client: DtDWebhook;
@@ -27,7 +27,7 @@ function initialize(client: DtDWebhook) {
     Client = client;
 }
 
-function reload() {
+async function reload() {
     FileURL = Client.config.dynmap ?? "";
 }
 
@@ -73,8 +73,8 @@ async function PlayerEmbed(event: ChatEvent) {
     let position = "";
     const player = _.find(dynmapInfo.players, p => p.account == account);
     if (player) {
-        const D = dims[player?.world] ?? "";
-        position = `${D}(${player?.x} ${player?.y} ${player?.z})`;
+        const D = dims[player.world] ?? "";
+        position = `${D}(${player.x} ${player.y} ${player.z})`;
     }
     /*
     Database.addMessage({
@@ -96,7 +96,7 @@ async function PlayerEmbed(event: ChatEvent) {
         .setColor(parseInt((event.playerName.match(/"color:#(.+)"/) || ["", "ffffff"])[1], 16))
         .setFooter({
             text: `${name} ${position}`,
-            iconURL: `https://crafatar.com/avatars/${uuid}?overlay`
+            iconURL: `https://crafthead.net/helm/${uuid}`
         })
         .setTimestamp(new Date(event.timestamp));
     return Embed;
@@ -105,7 +105,7 @@ async function PlayerEmbed(event: ChatEvent) {
 function PluginEmbed(event: ChatEvent) {
     const Embed = new EmbedBuilder();
     if (event.message.startsWith("[Server]")) {
-        Embed.setDescription(event.message.substr(8))
+        Embed.setDescription(event.message.substring(8))
             .setColor("#FF55FF")
             .setFooter({ text: "Server" });
     } else if (event.message.startsWith("* ")) {
@@ -227,5 +227,5 @@ interface ChatEvent extends Event {
     channel: string
 }
 const name = "Dynmap Info";
-const DynmapInfo: TaskService = { name, initialize, reload, start };
+const DynmapInfo: Service = { name, initialize, reload, start };
 export default DynmapInfo;

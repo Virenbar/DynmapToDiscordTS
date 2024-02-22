@@ -5,7 +5,6 @@ import DynmapInfo from "./dynmapInfo.js";
 import ServerInfo from "./serverInfo.js";
 export const Logger = log4js.getLogger("Service");
 const Services: Service[] = [];
-const Tasks: Task[] = [];
 
 function initialize(client: DtDWebhook): void {
     Logger.debug("Initializing");
@@ -15,37 +14,35 @@ function initialize(client: DtDWebhook): void {
         Logger.debug(`Initialized: ${M.name}`);
     });
     Logger.debug("Initializing done");
-    Tasks.push(...[ServerInfo, DynmapInfo]);
 }
 
-function reload() {
+async function reload() {
     Logger.debug("Reloading");
-    Services.forEach(M => {
-        if (M.reload) {
-            M.reload();
-            Logger.debug(`Reloaded: ${M.name}`);
+    for (const service of Services) {
+        if (service.reload) {
+            await service.reload();
+            Logger.debug(`Reloaded: ${service.name}`);
         }
-    });
+    }
     Logger.debug("Reloading done");
 }
 
 function start() {
     Logger.debug("Starting");
-    Tasks.forEach(T => {
-        Logger.debug(`Starting: ${T.name}`);
-        T.start();
-    });
+    for (const service of Services) {
+        if (service.start) {
+            service.start();
+            Logger.debug(`Starting: ${service.name}`);
+        }
+    }
     Logger.debug("Starting done");
 }
 
 export default { initialize, reload, start };
+
 export interface Service {
     name: string
     initialize(client: DtDWebhook): void;
-    reload?(): void;
+    reload?(): Promise<unknown>;
+    start?(): Promise<unknown>
 }
-export interface Task {
-    name: string
-    start(): Promise<unknown>
-}
-export type TaskService = Service & Task
