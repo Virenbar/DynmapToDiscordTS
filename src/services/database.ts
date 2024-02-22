@@ -3,7 +3,7 @@ import mysql from "mysql2/promise";
 import type { DtDWebhook } from "../DtDWebhook.js";
 import { sleepS } from "../helpers/index.js";
 import type { Event, Message, Online } from "../models/index.js";
-import type { TaskService } from "./index.js";
+import type { Service } from "./index.js";
 
 const Logger = log4js.getLogger("Database");
 let Client: DtDWebhook;
@@ -18,7 +18,7 @@ function initialize(client: DtDWebhook) {
     Client = client;
 }
 
-function reload() {
+async function reload() {
     Config = {
         host: process.env["host"] as string,
         user: process.env["user"] as string,
@@ -70,6 +70,6 @@ function addEvent(event: Event) {
 }
 
 const name = "Database";
-const TS: TaskService = { name, initialize, reload, start };
+const TS: Service = { name, initialize, reload, start };
 const Database = { ...TS, SaveToDB, addMessage, addOnline, addEvent } as const;
 export default Database;

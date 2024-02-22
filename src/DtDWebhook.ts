@@ -16,19 +16,23 @@ export class DtDWebhook extends WebhookClient {
     }
     public config;
     public logger;
-    public reload() {
-        Config.loadConfig();
-        Services.reload();
-    }
-    public start() {
+    public async initialize() {
         this.logger.info("Initializing");
         Services.initialize(this);
-        this.reload();
+
+    }
+    public async reload() {
+        Config.loadConfig();
+        await Services.reload();
+    }
+    public async start() {
+        this.initialize();
+        await this.reload();
         this.sendTitle();
         this.logger.info(`Running as ${this.id}`);
         Services.start();
     }
-    public async sendTitle() {
+    async sendTitle() {
         let description = `Version: ${meta.version}`;
         description += `\nNode: ${meta.nodeVersion} Discord.js: v${meta.discord}`;
         description += `\nServer: ${await ServerInfo.srvRecord()}`;

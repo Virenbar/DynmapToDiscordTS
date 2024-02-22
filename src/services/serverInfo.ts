@@ -5,7 +5,7 @@ import { JavaStatusResponse, status } from "minecraft-server-util";
 import type { DtDWebhook } from "../DtDWebhook.js";
 import { FetchError, fixMD, sleep, sleepS } from "./../helpers/index.js";
 //import Database from "./database.js";
-import type { TaskService } from "./index.js";
+import type { Service } from "./index.js";
 
 const Logger = log4js.getLogger("Server Info");
 let Client: DtDWebhook;
@@ -19,7 +19,7 @@ function initialize(client: DtDWebhook) {
     Client = client;
 }
 
-function reload() {
+async function reload() {
     Server = {
         host: Client.config.host,
         port: Client.config.port ?? undefined
@@ -128,7 +128,7 @@ async function CheckServer(): Promise<void> {
 }
 
 const name = "Dynmap Info";
-const ServerInfo: TaskService = { name, initialize, reload, start };
+const ServerInfo: Service = { name, initialize, reload, start };
 export default {
     ...ServerInfo,
     srvRecord
