@@ -27,12 +27,12 @@
     "@tsconfig/node20": "^20.1.2",
     "@tsconfig/strictest": "^2.0.3",
     "@types/lodash": "^4.14.202",
-    "@types/node": "^20.0.0",
+    "@types/node": "^20.11.20",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
     "del-cli": "^5.1.0",
     "eslint-plugin-import": "^2.29.1",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.0",
     "typescript": "^5.3.3"
   },
   "engines": {
