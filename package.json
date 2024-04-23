@@ -21,7 +21,7 @@
     "lodash": "^4.17.21",
     "log4js": "^6.9.1",
     "minecraft-server-util": "^5.4.4",
-    "mysql2": "^3.9.3"
+    "mysql2": "^3.9.7"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
