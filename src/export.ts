@@ -1,7 +1,7 @@
-import { Client, Collection, Embed, IntentsBitField, Message as DMessage, TextChannel } from "discord.js";
-import { createWriteStream, WriteStream } from "fs";
+import { Client, Collection, Message as DMessage, Embed, IntentsBitField, TextChannel } from "discord.js";
+import { WriteStream, createWriteStream } from "fs";
 import { tryParseInt } from "./helpers/index.js";
-import type { Event, Message, Online } from "./models/index.js";
+import type { Event, Message, Online } from "./types/index.js";
 
 const Messages: Message[] = [];
 const Events: Event[] = [];

@@ -1,14 +1,14 @@
 import { EmbedBuilder } from "discord.js";
 import _ from "lodash";
 import log4js from "log4js";
-import type { DtDWebhook } from "../DtDWebhook.js";
+
 import { FetchError, fixMD, getJSON, sleepS } from "../helpers/index.js";
-import type { Profile } from "../models/index.js";
-//import Database from "./database.js";
+import { Bot } from "../index.js";
+import type { Profile } from "../types/index.js";
 import type { Service } from "./index.js";
 
 const Logger = log4js.getLogger("Dynmap Info");
-let Client: DtDWebhook;
+let Client: Bot;
 let FileURL: string;
 
 let lostConnection = false;
@@ -23,7 +23,7 @@ const dims: { [dim: string]: string } = {
     "test": "🟡"
 };
 
-function initialize(client: DtDWebhook) {
+function initialize(client: Bot) {
     Client = client;
 }
 
@@ -37,7 +37,6 @@ async function start() {
         return;
     }
     await RefreshInfo();
-    Logger.info("Started");
     Logger.info(`Dynmap file: ${FileURL} Timestamp: ${dynmapInfo.timestamp}`);
 
     for (; ;) {
@@ -76,19 +75,6 @@ async function PlayerEmbed(event: ChatEvent) {
         const D = dims[player.world] ?? "";
         position = `${D}(${player.x} ${player.y} ${player.z})`;
     }
-    /*
-    Database.addMessage({
-        server: "",
-        user: account,
-        uuid: uuid,
-        message: event.message,
-        timestamp: new Date(event.timestamp),
-        dimension: player?.world ?? null,
-        X: player?.x ?? null,
-        Y: player?.y ?? null,
-        Z: player?.z ?? null
-    });
-    */
 
     //--Steve 00000000-0000-0000-0000-000000000000 Alex ..0001
     const Embed = new EmbedBuilder()
@@ -226,6 +212,7 @@ interface ChatEvent extends Event {
     account: string
     channel: string
 }
+
 const name = "Dynmap Info";
 const DynmapInfo: Service = { name, initialize, reload, start };
 export default DynmapInfo;

@@ -3,6 +3,10 @@ import log4js from "log4js";
 import { DtDWebhook } from "./DtDWebhook.js";
 //import Export from "./export.js";
 
+//const e = process.env["EXPORT"] as string;
+//await Export.start(e);
+export type Bot = DtDWebhook
+
 const DEBUG = process.env["DEBUG"];
 log4js.configure({
     appenders: {
@@ -16,9 +20,6 @@ log4js.configure({
         default: { appenders: ["info", "error", "console"], level: DEBUG ? "debug" : "info" }
     }
 });
-
-//const e = process.env["EXPORT"] as string;
-//await Export.start(e);
 
 const url = process.env["URL"] as string;
 const Client = new DtDWebhook(url);

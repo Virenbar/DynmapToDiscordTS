@@ -1,40 +1,39 @@
 import log4js from "log4js";
-import type { DtDWebhook } from "../DtDWebhook.js";
-//import Database from "./database.js";
+import type { Bot } from "../index.js";
 import DynmapInfo from "./dynmapInfo.js";
 import ServerInfo from "./serverInfo.js";
 export const Logger = log4js.getLogger("Service");
 const Services: Service[] = [];
 
-function initialize(client: DtDWebhook): void {
+function initialize(client: Bot): void {
     Logger.debug("Initializing");
     Services.push(...[ServerInfo, DynmapInfo]);
-    Services.forEach(M => {
-        M.initialize(client);
-        Logger.debug(`Initialized: ${M.name}`);
+    Services.forEach(S => {
+        S.initialize(client);
+        Logger.debug(`Initialized: ${S.name}`);
     });
     Logger.debug("Initializing done");
 }
 
-async function reload() {
+function reload() {
     Logger.debug("Reloading");
-    for (const service of Services) {
-        if (service.reload) {
-            await service.reload();
-            Logger.debug(`Reloaded: ${service.name}`);
+    Services.forEach(S => {
+        if (S.reload) {
+            S.reload();
+            Logger.debug(`Reloaded: ${S.name}`);
         }
-    }
+    });
     Logger.debug("Reloading done");
 }
 
 function start() {
     Logger.debug("Starting");
-    for (const service of Services) {
-        if (service.start) {
-            service.start();
-            Logger.debug(`Starting: ${service.name}`);
+    Services.forEach(S => {
+        if (S.start) {
+            S.start();
+            Logger.debug(`Started: ${S.name}`);
         }
-    }
+    });
     Logger.debug("Starting done");
 }
 
@@ -42,7 +41,7 @@ export default { initialize, reload, start };
 
 export interface Service {
     name: string
-    initialize(client: DtDWebhook): void;
+    initialize(client: Bot): void;
     reload?(): Promise<unknown>;
     start?(): Promise<unknown>
 }

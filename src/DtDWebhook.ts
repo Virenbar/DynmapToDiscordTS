@@ -23,7 +23,7 @@ export class DtDWebhook extends WebhookClient {
     }
     public async reload() {
         Config.loadConfig();
-        await Services.reload();
+        Services.reload();
     }
     public async start() {
         this.initialize();
