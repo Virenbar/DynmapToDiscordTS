@@ -1,6 +1,6 @@
 {
   "name": "dynmap-to-discord",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "description": "Dynmap to Discord relay",
   "author": "Virenbar",
   "license": "MIT",
@@ -16,17 +16,16 @@
     "start:dev": "yarn build && node build/index.js"
   },
   "dependencies": {
-    "discord.js": "^14.14.1",
+    "discord.js": "^14.15.2",
     "dotenv": "^16.4.5",
     "lodash": "^4.17.21",
     "log4js": "^6.9.1",
-    "minecraft-server-util": "^5.4.4",
-    "mysql2": "^3.9.3"
+    "minecraft-server-util": "^5.4.4"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/lodash": "^4.17.0",
+    "@types/lodash": "^4.17.1",
     "@types/node": "^20.12.5",
     "@typescript-eslint/eslint-plugin": "^7.5.0",
     "@typescript-eslint/parser": "^7.5.0",

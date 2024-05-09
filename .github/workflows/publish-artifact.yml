@@ -1,5 +1,4 @@
 name: Publish Artifact
-
 on:
   workflow_dispatch:
 jobs:

@@ -1,5 +1,4 @@
 name: Build Artifact
-
 on:
   push:
     branches: [master]

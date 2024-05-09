@@ -2,20 +2,19 @@ import { EmbedBuilder } from "discord.js";
 import _ from "lodash";
 import log4js from "log4js";
 import { JavaStatusResponse, status } from "minecraft-server-util";
-import type { DtDWebhook } from "../DtDWebhook.js";
+import { Bot } from "../index.js";
 import { FetchError, fixMD, sleep, sleepS } from "./../helpers/index.js";
-//import Database from "./database.js";
 import type { Service } from "./index.js";
 
 const Logger = log4js.getLogger("Server Info");
-let Client: DtDWebhook;
+let Client: Bot;
 let Server: { host: string, port: number | undefined };
 
 let lostConnection = false;
 let serverInfo: JavaStatusResponse;
 let playersOnline: Set<string> = new Set<string>();
 
-function initialize(client: DtDWebhook) {
+function initialize(client: Bot) {
     Client = client;
 }
 
@@ -29,7 +28,6 @@ async function reload() {
 async function start() {
     await refreshInfo();
     playersOnline = await getPlayerList();
-    Logger.info("Started");
     Logger.info(`Connected to ${await srvRecord()}`);
 
     for (; ;) {
@@ -103,7 +101,6 @@ async function CheckServer(): Promise<void> {
             playersList.push(`~~${fixMD(player)}~~`);
         });
         playersOnline = playersOnlineNew;
-        //Database.addOnline(new Date(), playersOnline.size);
 
         const Embed = new EmbedBuilder()
             .setDescription(playersList.join(" "))
@@ -127,9 +124,6 @@ async function CheckServer(): Promise<void> {
     }
 }
 
-const name = "Dynmap Info";
+const name = "Server Info";
 const ServerInfo: Service = { name, initialize, reload, start };
-export default {
-    ...ServerInfo,
-    srvRecord
-} as const;
+export default { ...ServerInfo, srvRecord } as const;
