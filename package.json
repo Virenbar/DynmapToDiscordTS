@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "discord.js": "^14.16.3",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.7",
     "lodash": "^4.17.21",
     "log4js": "^6.9.1",
     "minecraft-server-util": "^5.4.4"
@@ -26,9 +26,9 @@
     "@tsconfig/node20": "^20.1.4",
     "@tsconfig/strictest": "^2.0.5",
     "@types/lodash": "^4.17.13",
-    "@types/node": "^20.17.9",
-    "@typescript-eslint/eslint-plugin": "^8.16.0",
-    "@typescript-eslint/parser": "^8.16.0",
+    "@types/node": "^20.17.10",
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/parser": "^8.18.1",
     "del-cli": "^6.0.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint": "^8.57.1",
