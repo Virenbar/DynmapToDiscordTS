@@ -4,7 +4,8 @@
         "config:recommended",
         "group:allNonMajor",
         ":semanticCommitTypeAll(chore)",
-        ":meteor"
+        ":meteor",
+        "schedule:quarterly"
     ],
     "rangeStrategy": "bump",
     "packageRules": [
@@ -18,9 +19,6 @@
             ],
             "rangeStrategy": "auto"
         }
-    ],
-    "schedule": [
-        "every weekend"
     ],
     "assigneesFromCodeOwners": true
 }
