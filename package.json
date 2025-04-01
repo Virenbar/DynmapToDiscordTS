@@ -23,15 +23,15 @@
     "minecraft-server-util": "^5.4.4"
   },
   "devDependencies": {
-    "@eslint/js": "^9.20.0",
-    "@tsconfig/node20": "^20.1.4",
+    "@eslint/js": "^9.23.0",
+    "@tsconfig/node20": "^20.1.5",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/lodash": "^4.17.15",
-    "@types/node": "^22.13.4",
+    "@types/lodash": "^4.17.16",
+    "@types/node": "^22.13.14",
     "del-cli": "^6.0.0",
-    "eslint": "^9.20.1",
-    "typescript": "^5.7.3",
-    "typescript-eslint": "^8.24.0"
+    "eslint": "^9.23.0",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.29.0"
   },
   "engines": {
     "node": ">=18"
