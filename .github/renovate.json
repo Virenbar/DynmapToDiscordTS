@@ -18,6 +18,10 @@
                 "engines"
             ],
             "rangeStrategy": "auto"
+        },
+        {
+            "groupName": "actions",
+            "matchManagers": ["github-actions"]
         }
     ],
     "assigneesFromCodeOwners": true
