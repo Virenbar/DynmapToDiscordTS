@@ -24,5 +24,8 @@
             "matchManagers": ["github-actions"]
         }
     ],
+    "ignoreDeps": [
+        "node"
+    ],
     "assigneesFromCodeOwners": true
 }
