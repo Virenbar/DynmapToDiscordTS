@@ -246,10 +246,10 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/merge-streams/-/merge-streams-2.3.0.tgz#719df7fb41766bc143369eaa0dd56d8dc87c9958"
   integrity sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg==
 
-"@tsconfig/node22@^22.0.0":
-  version "22.0.5"
-  resolved "https://registry.yarnpkg.com/@tsconfig/node22/-/node22-22.0.5.tgz#56be9f34ccffd3aa85f9cc7365ad9765d5829adb"
-  integrity sha512-hLf2ld+sYN/BtOJjHUWOk568dvjFQkHnLNa6zce25GIH+vxKfvTgm3qpaH6ToF5tu/NN0IH66s+Bb5wElHrLcw==
+"@tsconfig/node24@^24.0.0":
+  version "24.0.4"
+  resolved "https://registry.yarnpkg.com/@tsconfig/node24/-/node24-24.0.4.tgz#ae50cc6b3288c1010454f0ec4659b47b520ca1b1"
+  integrity sha512-2A933l5P5oCbv6qSxHs7ckKwobs8BDAe9SJ/Xr2Hy+nDlwmLE1GhFh/g/vXGRZWgxBg9nX/5piDtHR9Dkw/XuA==
 
 "@tsconfig/strictest@^2.0.8":
   version "2.0.8"
