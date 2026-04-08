@@ -16,22 +16,22 @@
     "start:dev": "yarn build && node build/index.js"
   },
   "dependencies": {
-    "discord.js": "^14.26.0",
-    "dotenv": "^17.3.1",
-    "lodash": "^4.17.23",
+    "discord.js": "^14.26.2",
+    "dotenv": "^17.4.1",
+    "lodash": "^4.18.1",
     "log4js": "^6.9.1",
     "minecraft-server-util": "^5.4.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
-    "@tsconfig/node24": "^24.0.0",
+    "@tsconfig/node24": "^24.0.4",
     "@tsconfig/strictest": "^2.0.8",
     "@types/lodash": "^4.17.24",
-    "@types/node": "^24.12.0",
+    "@types/node": "^24.12.2",
     "del-cli": "^7.0.0",
     "eslint": "^9.39.4",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.58.0"
+    "typescript-eslint": "^8.58.1"
   },
   "engines": {
     "node": ">=18"
