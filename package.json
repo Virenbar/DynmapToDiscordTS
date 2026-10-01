@@ -16,7 +16,7 @@
     "start:dev": "yarn build && node build/index.js"
   },
   "dependencies": {
-    "discord.js": "^14.26.4",
+    "discord.js": "^14.27.0",
     "dotenv": "^17.4.2",
     "lodash": "^4.18.1",
     "log4js": "^6.9.1",
@@ -24,14 +24,14 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@tsconfig/node24": "^24.0.4",
+    "@tsconfig/node24": "^24.0.5",
     "@tsconfig/strictest": "^2.0.8",
-    "@types/lodash": "^4.17.24",
-    "@types/node": "^24.13.2",
+    "@types/lodash": "^4.17.25",
+    "@types/node": "^24.19.0",
     "del-cli": "^7.0.0",
-    "eslint": "^10.6.0",
+    "eslint": "^10.11.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.62.1"
+    "typescript-eslint": "^8.71.0"
   },
   "engines": {
     "node": ">=18"
